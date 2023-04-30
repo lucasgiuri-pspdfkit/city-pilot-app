@@ -1,4 +1,4 @@
-import { Image, View, Text, StyleSheet, Dimensions } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import { colors } from "../../assets/constants";
 
 const Logo = ({ title }) => {

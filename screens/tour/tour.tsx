@@ -1,57 +1,85 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Configuration, OpenAIApi } from "openai";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { TextInput, FlatList, StyleSheet, Text, View } from "react-native";
 
 const TourScreen = ({ navigation }) => {
-  const [errorMsg, setErrorMsg] = useState<string>("error");
-  const [apiResponse, setApiResponse] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-
-  console.log("go", process.env.GOOGLE_API_KEY)
+  const [messages, setMessages] = useState([
+    { text: "Hello, I'm your tour guide. How can I help you?", sender: "bot" },
+  ]);
 
   const apiKey = process.env.OPENAI_API_KEY;
   const organization = process.env.OPENAI_ORGANIZATION;
-  const configuration = new Configuration({
-    organization,
-    apiKey,
-  });
-  const openai = new OpenAIApi(configuration);
+  console.log("apiKey", apiKey);
 
-  const handleSubmit = async () => {
-    const endpointURL =
-      "https://api.openai.com/v1/engines/text-davinci-002/completions";
-    try {
-      const response = await axios.post(
-        endpointURL,
-        {
-          prompt:
-            'I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with "Unknown".\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\n\nQ: Who was president of the United States in 1955?\nA: Dwight D. Eisenhower was president of the United States in 1955.\n\nQ: Which party did he belong to?\nA: He belonged to the Republican Party.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: Where is the Valley of Kings?\nA:',
-          temperature: 0.5,
-          max_tokens: 1024,
+  const sendMessage = async (inputMessage: string) => {
+    const response = await axios.post(
+      // "https://api.openai.com/v1/engines/davinci-codex/completions",
+      "https://api.openai.com/v1/chat/completions",
+      {
+        prompt: inputMessage,
+        max_tokens: 60,
+        n: 1,
+        stop: ["\n"],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-        }
-      );
+      }
+    );
 
-      console.log("response", response);
-    } catch (error) {
-      console.log("error", error);
-    }
+    console.log("response", response);
 
-    setApiResponse("Something is going wrong, Please try again.");
-    setLoading(false);
+    const message = response.data.choices[0].text.trim();
+    setMessages([...messages, { text: message, sender: "bot" }]);
+  };
+
+  const sendUserMessage = (text) => {
+    setMessages([...messages, { text: text, sender: "user" }]);
+    sendMessage(text);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>LUCAS 123</Text>
-      <Text style={styles.text}>{apiResponse}</Text>
-      <Button title="Submit" onPress={handleSubmit} />
+      <View>
+        <FlatList
+          data={messages}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                alignItems: item.sender === "user" ? "flex-end" : "flex-start",
+              }}
+            >
+              <Text
+                style={{
+                  backgroundColor:
+                    item.sender === "user" ? "#E5E5EA" : "#7A7AFF",
+                  color: item.sender === "user" ? "#000" : "#FFF",
+                  padding: 10,
+                  borderRadius: 10,
+                  marginTop: 5,
+                  marginBottom: 5,
+                }}
+              >
+                {item.text}
+              </Text>
+            </View>
+          )}
+        />
+        <TextInput
+          style={{
+            borderWidth: 1,
+            borderColor: "#7A7AFF",
+            borderRadius: 10,
+            padding: 10,
+            margin: 10,
+          }}
+          placeholder="Type your message here"
+          onSubmitEditing={(event) => sendUserMessage(event.nativeEvent.text)}
+        />
+      </View>
     </View>
   );
 };
