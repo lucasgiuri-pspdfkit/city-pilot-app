@@ -21,10 +21,10 @@ export default function App() {
           header: (props) => <Logo title={props.children} />,
           headerTintColor: "white",
           headerStyle: {
-            backgroundColor: colors.blue,
+            backgroundColor: colors.primary,
           },
           tabBarStyle: {
-            backgroundColor: colors.blue,
+            backgroundColor: colors.primary,
           },
           tabBarIcon: ({ focused }) => {
             if (route.name === "Home") {

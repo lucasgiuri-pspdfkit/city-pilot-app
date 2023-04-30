@@ -41,6 +41,12 @@ In addition you will need to download Xcode or Android Studio.
     npm run ios
 ```
 
+## Screenshots
+<img alt="home image" src="https://github.com/lucasgiuri-pspdfkit/city-pilot-app/screenshots/home.png" width="200"/>
+<img alt="tour image" src="https://github.com/lucasgiuri-pspdfkit/city-pilot-app/screenshots/tour.png"  width="200"/>
+<img alt="settings image" src="https://github.com/lucasgiuri-pspdfkit/city-pilot-app/screenshots/settings.png" width="200"/>
+
+
 
 ## License
 

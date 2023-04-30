@@ -31,7 +31,6 @@ const locations = [
 ];
 
 const HomeScreen = ({ navigation }) => {
-  console.log("p", process.env.GOOGLE_API_KEY)
   const [errorMsg, setErrorMsg] = useState(null);
   const [location, setLocation] = useState(null);
 

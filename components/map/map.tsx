@@ -27,7 +27,7 @@ const Map = ({
   const [orderedLocations, setOrderedLocations] = useState<Location[]>([]);
   const originCasa = { latitude: 41.373974, longitude: 2.117263 };
   const origin = { longitude: 2.15638, latitude: 41.39137 };
-  const GOOGLE_MAPS_APIKEY = process.env.GOOGLE_API_KEY;
+  const GOOGLE_KEY = process.env.GOOGLE_KEY;
 
   const orderByNearest = (locations: Location[]) => {
     const orderedLocations = locations.sort((a, b) => {
@@ -63,45 +63,59 @@ const Map = ({
       }}
     >
       <MapViewDirections
-        origin={origin}
-        destination={orderedLocations[0]}
-        apikey={GOOGLE_MAPS_APIKEY}
+        apikey={GOOGLE_KEY}
         strokeWidth={8}
         strokeColor={colors.orange}
+        origin={origin}
+        destination={orderedLocations[0]}
       />
 
       <MapViewDirections
-        origin={orderedLocations[1]}
-        destination={orderedLocations[2]}
-        apikey={GOOGLE_MAPS_APIKEY}
+        apikey={GOOGLE_KEY}
         strokeWidth={8}
         strokeColor={colors.orange}
+        origin={orderedLocations[0]}
+        destination={orderedLocations[1]}
+      />
+
+      <MapViewDirections
+        apikey={GOOGLE_KEY}
+        strokeWidth={8}
+        strokeColor={colors.orange}
+        origin={orderedLocations[1]}
+        destination={orderedLocations[2]}
+      />
+      <MapViewDirections
+        apikey={GOOGLE_KEY}
+        strokeWidth={8}
+        strokeColor={colors.orange}
+        origin={orderedLocations[2]}
+        destination={orderedLocations[3]}
       />
       {orderedLocations.length > 0 &&
         orderedLocations.map((location, index) => (
           <View key={index}>
-            {index === 0 && (
+            {/* {index === 0 && (
               <MapViewDirections
                 splitWaypoints
                 mode="WALKING"
-                origin={origin}
                 strokeWidth={8}
+                apikey={GOOGLE_KEY}
                 strokeColor={colors.orange}
-                apikey={GOOGLE_MAPS_APIKEY}
+                origin={origin}
                 destination={orderedLocations[0]}
               />
             )}
             {index !== 0 && (
-              <MapViewDirections
-                splitWaypoints
+              )} */}
+            {/* <MapViewDirections
                 mode="WALKING"
                 strokeWidth={8}
-                origin={location}
+                apikey={GOOGLE_KEY}
                 strokeColor={colors.orange}
-                apikey={GOOGLE_MAPS_APIKEY}
+                origin={index === 0 ? origin : orderedLocations[index - 1]}
                 destination={orderedLocations[index]}
-              />
-            )}
+              /> */}
             <Marker
               coordinate={location}
               title={location.title}

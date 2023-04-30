@@ -9,7 +9,6 @@ const TourScreen = ({ navigation }) => {
 
   const apiKey = process.env.OPENAI_API_KEY;
   const organization = process.env.OPENAI_ORGANIZATION;
-  console.log("apiKey", apiKey);
 
   const sendMessage = async (inputMessage: string) => {
     const response = await axios.post(
@@ -28,8 +27,6 @@ const TourScreen = ({ navigation }) => {
         },
       }
     );
-
-    console.log("response", response);
 
     const message = response.data.choices[0].text.trim();
     setMessages([...messages, { text: message, sender: "bot" }]);
